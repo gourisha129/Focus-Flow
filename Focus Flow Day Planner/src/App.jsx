@@ -8,7 +8,7 @@ import {
 import {
   Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis
 } from 'recharts'
-
+const API_BASE = 'https://focus-flow-bel3.onrender.com'
 const initialTasks = [
   { id: 1, title: 'Review React component basics', category: 'Study', priority: 'High', done: false },
   { id: 2, title: 'Finish presentation outline', category: 'College', priority: 'High', done: false },
@@ -90,7 +90,7 @@ export default function App() {
   useEffect(() => { localStorage.setItem('focusflow-profile', JSON.stringify(profile)) }, [profile])
   useEffect(() => { if (session) localStorage.setItem('focusflow-session', JSON.stringify(session)); else localStorage.removeItem('focusflow-session') }, [session])
 
-  useEffect(() => { fetch('/api/status').then(response => response.ok ? response.json() : null).then(data => setAiConnected(Boolean(data?.aiConfigured))).catch(() => setAiConnected(false)) }, [])
+  useEffect(() => { fetch('${API_BASE}/api/status').then(response => response.ok ? response.json() : null).then(data => setAiConnected(Boolean(data?.aiConfigured))).catch(() => setAiConnected(false)) }, [])
 
   useEffect(() => {
     if (!timerRunning) return undefined
@@ -166,7 +166,7 @@ export default function App() {
     setAiInput('')
     setAiLoading(true)
     try {
-      const response = await fetch('/api/ai', {
+      const response = await fetch('${API_BASE}/api/ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
