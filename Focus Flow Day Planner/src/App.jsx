@@ -90,7 +90,7 @@ export default function App() {
   useEffect(() => { localStorage.setItem('focusflow-profile', JSON.stringify(profile)) }, [profile])
   useEffect(() => { if (session) localStorage.setItem('focusflow-session', JSON.stringify(session)); else localStorage.removeItem('focusflow-session') }, [session])
 
-  useEffect(() => { fetch('${API_BASE}/api/status').then(response => response.ok ? response.json() : null).then(data => setAiConnected(Boolean(data?.aiConfigured))).catch(() => setAiConnected(false)) }, [])
+  useEffect(() => { fetch(`${API_BASE}/api/status`).then(response => response.ok ? response.json() : null).then(data => setAiConnected(Boolean(data?.aiConfigured))).catch(() => setAiConnected(false)) }, [])
 
   useEffect(() => {
     if (!timerRunning) return undefined
@@ -166,7 +166,7 @@ export default function App() {
     setAiInput('')
     setAiLoading(true)
     try {
-      const response = await fetch('${API_BASE}/api/ai', {
+      const response = await fetch(`${API_BASE}/api/ai`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -271,7 +271,7 @@ function AIAssistant({ tasks, expenses, budget, spent, focusMinutes, messages, i
     if (!topic || videoLoading) return
     setVideoLoading(true); setVideoError(''); setVideoResults([])
     try {
-      const response = await fetch(`/api/videos?q=${encodeURIComponent(topic)}`)
+const response = await fetch(`${API_BASE}/api/videos?q=${encodeURIComponent(topic)}`)
       const data = await response.json().catch(() => ({}))
       if (!response.ok) throw new Error(data.error || 'YouTube search failed.')
       setVideoResults(data.videos || [])
