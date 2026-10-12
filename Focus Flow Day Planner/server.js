@@ -68,7 +68,12 @@ app.get('/api/videos', async (req, res) => {
     const data = await response.json().catch(() => ({}))
     if (!response.ok) {
       console.error('YouTube request failed:', response.status, data?.error?.message || '')
-      return res.status(502).json({ error: 'YouTube search failed. Check your API key, enabled API, quota, and network.' })
+     return res.status(502).json({
+  error: 'YouTube search failed.',
+  details: data?.error?.message || `HTTP ${response.status}`,
+  reason: data?.error?.errors?.[0]?.reason || 'unknown'
+      })
+
     }
     res.json({ videos: (data.items || []).map(item => ({ id: item.id?.videoId, title: item.snippet?.title, channel: item.snippet?.channelTitle, thumbnail: item.snippet?.thumbnails?.medium?.url || item.snippet?.thumbnails?.default?.url, publishedAt: item.snippet?.publishedAt })).filter(v => v.id) })
   } catch (error) {
