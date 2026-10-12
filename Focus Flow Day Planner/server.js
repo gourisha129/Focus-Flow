@@ -1,7 +1,12 @@
 import 'dotenv/config'
 import express from 'express'
+import 'dotenv/config'
+import express from 'express'
+import cors from 'cors'
 
 const app = express()
+app.use(cors())
+app.use(express.json({ limit: '32kb' }))
 const port = Number(process.env.API_PORT || 3001)
 app.use(express.json({ limit: '32kb' }))
 
